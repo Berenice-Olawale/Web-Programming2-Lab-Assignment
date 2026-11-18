@@ -1,6 +1,0 @@
-# Never upload secrets (the Atlas connection string lives in .env) to Git!
-.env
-# Installed by "npm install" (Render runs it for you during the build)
-node_modules/
-*.log
-.DS_Store
