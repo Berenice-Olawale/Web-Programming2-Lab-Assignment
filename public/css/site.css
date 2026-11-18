@@ -1,0 +1,33 @@
+/* Small additions on top of the Bootswatch theme */
+.hero {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #0b3d91 100%);
+    position: relative;
+    overflow: hidden;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    right: -120px; top: -120px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-img { transform: rotate(-2deg); transition: transform .3s ease; }
+.hero-img:hover { transform: rotate(0deg) scale(1.02); }
+
+.stats-band { margin-top: -2.2rem; position: relative; z-index: 2; }
+.stat-card { border: 0; border-radius: 1rem; }
+.stat-number { font-size: 2.2rem; font-weight: 800; color: var(--bs-primary); line-height: 1.1; }
+
+.feature-card, .deal-card { border: 0; border-radius: 1rem; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
+.feature-card:hover, .deal-card:hover { transform: translateY(-4px); box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .15) !important; }
+.feature-icon { font-size: 3rem; color: var(--bs-primary); line-height: 1; }
+
+.deals-band { background: var(--bs-tertiary-bg); }
+.cta-band { background: linear-gradient(135deg, #0b3d91 0%, var(--bs-primary) 100%); }
+
+.table thead th { white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+    .hero-img, .feature-card, .deal-card { transition: none; }
+}
