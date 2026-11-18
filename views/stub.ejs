@@ -1,0 +1,15 @@
+<%- include("partials/header") %>
+<div class="container py-5">
+    <div class="card shadow-sm border-warning">
+        <div class="card-body p-4">
+            <span class="badge bg-warning text-dark mb-2">Under construction</span>
+            <h1 class="h3"><%= title %></h1>
+            <p class="text-muted">Who can see this menu: <strong><%= access %></strong></p>
+            <p>This page is a placeholder. The menu and the access rule are already in place; what is still to do:</p>
+            <ul>
+                <% todo.forEach(function (t) { %><li><%= t %></li><% }); %>
+            </ul>
+        </div>
+    </div>
+</div>
+<%- include("partials/footer") %>
