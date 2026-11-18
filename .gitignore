@@ -1,0 +1,6 @@
+# Secrets: the Atlas connection string and the session secret live in .env - never commit it!
+.env
+# Installed by "npm install" (Render runs it during the build)
+node_modules/
+*.log
+.DS_Store
