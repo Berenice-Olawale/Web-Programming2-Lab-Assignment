@@ -1,0 +1,26 @@
+<%- include("partials/header") %>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-4"><i class="bi bi-box-arrow-in-right"></i> Login</h1>
+                    <% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+                    <form method="post" action="/login" novalidate>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" value="<%= form.username %>" autocomplete="username" autofocus required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <p class="text-muted small mt-3 mb-0">No account yet? <a href="/register">Registration</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("partials/footer") %>
