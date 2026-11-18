@@ -1,0 +1,99 @@
+<%- include("../partials/header") %>
+<div class="container py-4">
+    <h1 class="h3 mb-1">Database</h1>
+    <p class="text-muted">Data from three collections: <strong>notebooks</strong>, <strong>processors</strong> and <strong>operating systems</strong> (joined with Mongoose populate).</p>
+    <%- include("_tabs") %>
+
+    <form method="get" action="/database" class="card card-body shadow-sm mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label" for="q">Search</label>
+                <input type="text" class="form-control" id="q" name="q" value="<%= filters.q %>" placeholder="brand, model, video controller">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="manufacturer">Brand</label>
+                <select class="form-select" id="manufacturer" name="manufacturer">
+                    <option value="">All brands</option>
+                    <% manufacturers.forEach(function (m) { %>
+                    <option value="<%= m %>"<%= filters.manufacturer === m ? ' selected' : '' %>><%= m %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="maxPrice">Maximum price (<%= site.currency %>)</label>
+                <input type="number" min="0" step="1000" class="form-control" id="maxPrice" name="maxPrice" value="<%= filters.maxPrice %>">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="processor">Processor</label>
+                <select class="form-select" id="processor" name="processor">
+                    <option value="">All processors</option>
+                    <% processors.forEach(function (p) { %>
+                    <option value="<%= p._id %>"<%= filters.processor === String(p._id) ? ' selected' : '' %>><%= p.manufacturer %> <%= p.type %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="os">Operating system</label>
+                <select class="form-select" id="os" name="os">
+                    <option value="">All systems</option>
+                    <% opsystems.forEach(function (o) { %>
+                    <option value="<%= o._id %>"<%= filters.os === String(o._id) ? ' selected' : '' %>><%= o.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="sort">Order by</label>
+                <select class="form-select" id="sort" name="sort">
+                    <option value="brand"<%= filters.sort === 'brand' ? ' selected' : '' %>>Brand and model</option>
+                    <option value="price_asc"<%= filters.sort === 'price_asc' ? ' selected' : '' %>>Price: low to high</option>
+                    <option value="price_desc"<%= filters.sort === 'price_desc' ? ' selected' : '' %>>Price: high to low</option>
+                    <option value="memory_desc"<%= filters.sort === 'memory_desc' ? ' selected' : '' %>>Memory: most first</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex flex-wrap align-items-center gap-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="stock" name="stock" value="1"<%= filters.stock ? ' checked' : '' %>>
+                    <label class="form-check-label" for="stock">Only notebooks in stock</label>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-funnel"></i> Filter</button>
+                <% if (hasFilters) { %><a href="/database" class="btn btn-outline-secondary">Clear</a><% } %>
+            </div>
+        </div>
+    </form>
+
+    <p class="text-muted"><strong><%= total %></strong> notebook<%= total === 1 ? '' : 's' %> found<% if (totalPages > 1) { %> &ndash; page <%= page %> of <%= totalPages %><% } %></p>
+
+    <% if (items.length === 0) { %>
+    <div class="alert alert-info">No notebooks match these filters.</div>
+    <% } else { %>
+    <div class="table-responsive shadow-sm">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-primary">
+                <tr>
+                    <th>Brand</th><th>Model</th><th>Display</th><th>Memory</th><th>Disk</th>
+                    <th>Video controller</th><th>Processor</th><th>Operating system</th>
+                    <th class="text-end">Price</th><th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% items.forEach(function (n) { %>
+                <tr>
+                    <td class="fw-semibold"><%= n.manufacturer %></td>
+                    <td><%= n.type %></td>
+                    <td><%= fmtDisplay(n.display) %></td>
+                    <td><%= fmtMemory(n.memory) %></td>
+                    <td><%= fmtDisk(n.harddisk) %></td>
+                    <td><%= n.videocontroller %></td>
+                    <td><%= n.processor ? n.processor.manufacturer + ' ' + n.processor.type : '-' %></td>
+                    <td><%= n.opsystem ? n.opsystem.name : '-' %></td>
+                    <td class="text-end text-nowrap"><%= fmtPrice(n.price) %></td>
+                    <td><% if (n.pieces > 0) { %><span class="badge bg-success"><%= n.pieces %> pcs</span><% } else { %><span class="badge bg-secondary">out of stock</span><% } %></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-4"><%- include("_pagination") %></div>
+    <% } %>
+</div>
+<%- include("../partials/footer") %>

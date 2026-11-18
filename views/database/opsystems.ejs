@@ -1,0 +1,21 @@
+<%- include("../partials/header") %>
+<div class="container py-4">
+    <h1 class="h3 mb-1">Database</h1>
+    <p class="text-muted">The <strong>operating systems</strong> collection and how many notebooks use each system.</p>
+    <%- include("_tabs") %>
+    <div class="table-responsive shadow-sm">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-primary"><tr><th>Operating system</th><th class="text-end">Notebooks</th><th></th></tr></thead>
+            <tbody>
+                <% rows.forEach(function (o) { %>
+                <tr>
+                    <td class="fw-semibold"><%= o.name %></td>
+                    <td class="text-end"><span class="badge bg-<%= o.count ? 'primary' : 'secondary' %>"><%= o.count %></span></td>
+                    <td class="text-end"><% if (o.count) { %><a class="btn btn-sm btn-outline-primary" href="/database?os=<%= o._id %>">Show notebooks</a><% } %></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<%- include("../partials/footer") %>
