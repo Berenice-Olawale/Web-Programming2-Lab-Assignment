@@ -1,0 +1,51 @@
+<%- include("partials/header") %>
+<div class="container py-4">
+    <h1 class="h3 mb-1"><i class="bi bi-bar-chart"></i> Graph</h1>
+    <p class="text-muted">Statistics of the notebooks collection, drawn with <a href="https://www.chartjs.org/" target="_blank" rel="noopener">Chart.js</a>.</p>
+    <% if (!hasData) { %>
+    <div class="alert alert-info">There is no data to draw yet.</div>
+    <% } else { %>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm"><div class="card-body">
+                <h2 class="h5">Notebook models per brand</h2>
+                <canvas id="countChart" height="220"></canvas>
+            </div></div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm"><div class="card-body">
+                <h2 class="h5">Pieces in stock per brand</h2>
+                <canvas id="stockChart" height="220"></canvas>
+            </div></div>
+        </div>
+        <div class="col-12">
+            <div class="card shadow-sm"><div class="card-body">
+                <h2 class="h5">Average price per brand (<%= site.currency %>)</h2>
+                <canvas id="priceChart" height="110"></canvas>
+            </div></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script>
+        const data = <%- json %>;
+        const colors = ["#2780e3", "#3fb618", "#ff7518", "#9954bb", "#ff0039", "#373a3c", "#6610f2", "#20c997", "#fd7e14", "#0dcaf0"];
+        const paint = () => data.count.labels.map((_, i) => colors[i % colors.length]);
+
+        new Chart(document.getElementById("countChart"), {
+            type: "bar",
+            data: { labels: data.count.labels, datasets: [{ label: "Models", data: data.count.values, backgroundColor: paint() }] },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+        });
+        new Chart(document.getElementById("stockChart"), {
+            type: "doughnut",
+            data: { labels: data.stock.labels, datasets: [{ data: data.stock.values, backgroundColor: paint() }] }
+        });
+        new Chart(document.getElementById("priceChart"), {
+            type: "bar",
+            data: { labels: data.price.labels, datasets: [{ label: "Average price", data: data.price.values, backgroundColor: "#2780e3" }] },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+    <% } %>
+</div>
+<%- include("partials/footer") %>
