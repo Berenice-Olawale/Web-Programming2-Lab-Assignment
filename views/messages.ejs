@@ -1,0 +1,22 @@
+<%- include("partials/header") %>
+<div class="container py-4">
+    <h1 class="h3 mb-1"><i class="bi bi-chat-left-text"></i> Messages</h1>
+    <p class="text-muted">Messages sent with the Contact form, newest first. Total: <strong><%= items.length %></strong></p>
+    <% if (items.length === 0) { %>
+    <div class="alert alert-info">There are no messages yet.</div>
+    <% } else { %>
+    <% items.forEach(function (m) { %>
+    <div class="card shadow-sm mb-3">
+        <div class="card-header d-flex flex-wrap justify-content-between gap-2">
+            <strong><%= m.subject %></strong>
+            <span class="text-muted small"><i class="bi bi-clock"></i> <%= new Date(m.createdAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Budapest" }) %></span>
+        </div>
+        <div class="card-body">
+            <p class="mb-2" style="white-space: pre-line;"><%= m.message %></p>
+            <p class="text-muted small mb-0">From: <%= m.name %> &lt;<a href="mailto:<%= m.email %>"><%= m.email %></a>&gt;</p>
+        </div>
+    </div>
+    <% }); %>
+    <% } %>
+</div>
+<%- include("partials/footer") %>
