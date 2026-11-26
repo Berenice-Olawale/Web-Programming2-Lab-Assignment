@@ -1,0 +1,61 @@
+<%- include("../partials/header") %>
+<%
+    const action = mode === "edit" ? "/crud/" + id : "/crud";
+    const field = (name, label, type, extra) => {
+        const bad = errors[name] ? " is-invalid" : "";
+        return '<div class="col-md-6"><label class="form-label" for="' + name + '">' + label + '</label>' +
+            '<input type="' + type + '" class="form-control' + bad + '" id="' + name + '" name="' + name + '" value="' + escapeHtml(form[name]) + '" ' + (extra || "") + '>' +
+            (errors[name] ? '<div class="invalid-feedback">' + escapeHtml(errors[name]) + '</div>' : '') + '</div>';
+    };
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+%>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-4"><%= mode === "edit" ? "Edit notebook" : "New notebook" %></h1>
+                    <form method="post" action="<%= action %>" novalidate>
+                        <div class="row g-3">
+                            <%- field("manufacturer", "Brand", "text", 'maxlength="60" required') %>
+                            <%- field("type", "Model", "text", 'maxlength="100" required') %>
+                            <%- field("display", "Display (inch)", "number", 'step="0.1" min="1" required') %>
+                            <%- field("memory", "Memory (MB)", "number", 'step="1" min="1" required') %>
+                            <%- field("harddisk", "Disk (GB)", "number", 'step="1" min="1" required') %>
+                            <%- field("videocontroller", "Video controller", "text", 'maxlength="100"') %>
+                            <%- field("price", "Price (" + site.currency + ")", "number", 'step="1" min="0" required') %>
+                            <%- field("pieces", "Pieces in stock", "number", 'step="1" min="0" required') %>
+                            <div class="col-md-6">
+                                <label class="form-label" for="processor">Processor</label>
+                                <select class="form-select<%= errors.processor ? ' is-invalid' : '' %>" id="processor" name="processor" required>
+                                    <option value="">Choose...</option>
+                                    <% processors.forEach(function (p) { %>
+                                    <option value="<%= p._id %>"<%= form.processor === String(p._id) ? ' selected' : '' %>><%= p.manufacturer %> <%= p.type %></option>
+                                    <% }); %>
+                                </select>
+                                <% if (errors.processor) { %><div class="invalid-feedback"><%= errors.processor %></div><% } %>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="opsystem">Operating system</label>
+                                <select class="form-select<%= errors.opsystem ? ' is-invalid' : '' %>" id="opsystem" name="opsystem" required>
+                                    <option value="">Choose...</option>
+                                    <% opsystems.forEach(function (o) { %>
+                                    <option value="<%= o._id %>"<%= form.opsystem === String(o._id) ? ' selected' : '' %>><%= o.name %></option>
+                                    <% }); %>
+                                </select>
+                                <% if (errors.opsystem) { %><div class="invalid-feedback"><%= errors.opsystem %></div><% } %>
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+                            <a href="/crud" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("../partials/footer") %>
